@@ -66,14 +66,6 @@ export function colorGradientGenerator(number_of_cols, number_of_rows, startRGB,
   }
 }
 
-
-let number_of_rows = 4, number_of_cols = 4;
-let start_rgb_value = [255, 0, 212]
-let end_rgb_value = [0, 221, 255]
-export let color_gradient = colorGradientGenerator(number_of_cols, number_of_rows, start_rgb_value, end_rgb_value, 2)
-
-
-
 export function rgbToText(r, g, b) {
   return "rgb(" + r + "," + g + "," + b + ")";
 }

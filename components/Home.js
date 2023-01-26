@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
-import { Audio } from "expo-av";
+import { Text, View, StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
 import SoundButton from "./SoundButton";
 import { colorGradientGenerator, rgbToText } from "./ColorGradient";
 
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
 export default function Home() {
-  const [color_gradient, Set_color_gradient] = useState([])
-  let number_of_rows = 4,
-    number_of_cols = 4;
+  let button_sides_length = 123; //dont forget to include margins 120+3
+  let max_number_of_buttons_for_rows = 6;
+  let max_number_of_buttons_for_cols = 5;
+  let number_of_cols = Math.min(Math.floor((windowWidth-5) / button_sides_length), max_number_of_buttons_for_cols)
+  let number_of_rows = Math.min(Math.floor((windowHeight-10) / button_sides_length), max_number_of_buttons_for_rows)
   let start_rgb_value = [255, 0, 212];
   let end_rgb_value = [0, 221, 255];
+
+  const [color_gradient, Set_color_gradient] = useState([]);
 
   //initialize color_gradient
   useEffect(() => {
@@ -24,7 +31,6 @@ export default function Home() {
       temp_color_gradient.push(row);
     }
     Set_color_gradient(temp_color_gradient.slice()); //copying array
-    console.log(color_gradient);
   }, []);
 
   return (
@@ -35,9 +41,12 @@ export default function Home() {
             <View style={styles.row}>
               {[...Array(number_of_cols).keys()].map((index_x) => {
                 if (color_gradient.length <= 0) {
-                  return;
+                  return [];
+                } else {
+                  return (
+                    <SoundButton y_coordinate={index_y} x_coordinate={index_x} button_color={color_gradient[index_y][index_x]} />
+                  );
                 }
-                return <SoundButton y_coordinate={index_y} x_coordinate={index_x} button_color={color_gradient[index_y][index_x]} />;
               })}
             </View>
           );
@@ -50,9 +59,10 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 20,
+    width: windowWidth,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#121212",
   },
   row: {
     flexDirection: "row",
